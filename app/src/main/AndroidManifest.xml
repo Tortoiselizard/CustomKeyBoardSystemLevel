@@ -40,7 +40,7 @@
 
         <!-- Servicio para la franja flotante -->
         <service
-            android:name=".FloatingBannerService"
+            android:name=".Keyboard"
             android:exported="false"/>
 
     </application>
