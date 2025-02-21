@@ -20,14 +20,14 @@ class CustomKeyboardApp : InputMethodService() {
 
     override fun onStartInputView(editorInfo: EditorInfo?, restarting: Boolean) {
         // Iniciar la franja flotante
-        if (!isServiceRunning(FloatingBannerService::class.java)) {
-            startService(Intent(this, FloatingBannerService::class.java))
+        if (!isServiceRunning(Keyboard::class.java)) {
+            startService(Intent(this, Keyboard::class.java))
         }
     }
 
     override fun onWindowHidden() {
         // Detener el servicio cuando el teclado se destruye
-        stopService(Intent(this, FloatingBannerService::class.java))
+        stopService(Intent(this, Keyboard::class.java))
         super.onWindowHidden()
     }
 
