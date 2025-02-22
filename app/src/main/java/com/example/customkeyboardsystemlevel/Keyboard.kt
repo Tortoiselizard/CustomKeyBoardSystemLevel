@@ -2,6 +2,7 @@ package com.example.customkeyboardsystemlevel
 
 import android.app.Service
 import android.content.Intent
+import android.content.res.Resources
 import android.graphics.PixelFormat
 import android.os.IBinder
 import android.view.Gravity
@@ -53,9 +54,16 @@ class Keyboard : Service() {
 
     // Función para crear una tecla (ImageView) programáticamente
     private fun createKey(value: String): ImageView {
+        val screenWidth = Resources.getSystem().displayMetrics.widthPixels
+        val screenHeight = Resources.getSystem().displayMetrics.heightPixels
+
+        val randomX = (0..screenWidth - 120).random()  // Evitar que se salga del borde
+        val randomY = (0..screenHeight - 120).random()
+
         return ImageView(this).apply {
-            layoutParams = FrameLayout.LayoutParams(120, 120).apply {  // Tamaño del botón
-                gravity = Gravity.CENTER  // Centramos por defecto
+            layoutParams = FrameLayout.LayoutParams(120, 120).apply {
+                leftMargin = randomX  // Posición X aleatoria
+                topMargin = randomY   // Posición Y aleatoria
             }
             setImageResource(R.drawable.ic_floating_ball)
             setOnClickListener { sendKey(value) }
