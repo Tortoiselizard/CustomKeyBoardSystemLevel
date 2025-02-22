@@ -2,6 +2,9 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools">
 
+    <!-- Permiso para mostrar vistas flotantes sobre otras aplicaciones -->
+    <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW"/>
+
     <application
         android:allowBackup="true"
         android:dataExtractionRules="@xml/data_extraction_rules"
@@ -22,6 +25,7 @@
             </intent-filter>
         </activity>
 
+        <!-- Servicio del teclado -->
         <service android:name=".CustomKeyboardApp"
             android:label="Programmer World Keyboard"
             android:permission="android.permission.BIND_INPUT_METHOD"
@@ -33,6 +37,12 @@
                 android:name="android.view.im"
                 android:resource="@xml/custom_method"/>
         </service>
+
+        <!-- Servicio para la franja flotante -->
+        <service
+            android:name=".Keyboard"
+            android:exported="false"/>
+
     </application>
 
 </manifest>
