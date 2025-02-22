@@ -9,7 +9,9 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.WindowManager
 import android.widget.Button
+import android.widget.ImageView
 import androidx.localbroadcastmanager.content.LocalBroadcastManager
+import android.widget.FrameLayout
 
 class Keyboard : Service() {
 
@@ -21,19 +23,16 @@ class Keyboard : Service() {
         windowManager = getSystemService(WINDOW_SERVICE) as WindowManager
 
         // Inflamos la vista flotante desde un XML
-        keyboardView = LayoutInflater.from(this).inflate(R.layout.floating_keyboard, null)
+        keyboardView = FrameLayout(this).apply {
+            setBackgroundColor(0x80000000.toInt())
+        }
 
         // Configurar eventos de las teclas
-        val keys = listOf(
-            R.id.key_1 to "1", R.id.key_2 to "2", R.id.key_3 to "3", R.id.key_4 to "4", R.id.key_5 to "5",
-            R.id.key_6 to "6", R.id.key_7 to "7", R.id.key_8 to "8", R.id.key_9 to "9", R.id.key_0 to "0",
-            R.id.key_a to "A", R.id.key_b to "B", R.id.key_c to "C"
-        )
+        val keys = listOf("1", "2", "3", "A", "B", "C")
 
-        keys.forEach { (id, value) ->
-            keyboardView.findViewById<Button>(id).setOnClickListener {
-                sendKey(value)
-            }
+        keys.forEach { value ->
+            val kewView = createKey(value)
+            (keyboardView as FrameLayout).addView(kewView)
         }
 
         // Configuramos los parámetros para ocupar toda la pantalla
@@ -50,6 +49,18 @@ class Keyboard : Service() {
         layoutParams.gravity = Gravity.TOP  // Posición en la parte superior
 
         windowManager.addView(keyboardView, layoutParams)
+    }
+
+    // Función para crear una tecla (ImageView) programáticamente
+    private fun createKey(value: String): ImageView {
+        return ImageView(this).apply {
+            layoutParams = FrameLayout.LayoutParams(120, 120).apply {  // Tamaño del botón
+                gravity = Gravity.CENTER  // Centramos por defecto
+            }
+            setImageResource(R.drawable.ic_floating_ball)
+            setOnClickListener { sendKey(value) }
+            alpha = 0.5f  // Opacidad
+        }
     }
 
     private fun sendKey(value: String) {
