@@ -9,8 +9,32 @@ import android.view.View
 import android.view.inputmethod.EditorInfo
 import android.widget.Button
 import android.view.inputmethod.InputConnection
+import androidx.localbroadcastmanager.content.LocalBroadcastManager
+import android.content.BroadcastReceiver
+import android.content.IntentFilter
 
 class CustomKeyboardApp : InputMethodService() {
+
+    private val keyboardReceiver = object : BroadcastReceiver() {
+        override fun onReceive(context: Context?, intent: Intent?) {
+            val key = intent?.getStringExtra("key") // Recibe la tecla enviada
+            key?.let { sendKey(it) }  // Envia la tecla al input
+        }
+    }
+
+    override fun onCreate() {
+        super.onCreate()
+        // Registramos el receiver para escuchar eventos de teclas
+        LocalBroadcastManager.getInstance(this).registerReceiver(
+            keyboardReceiver, IntentFilter("KEY_PRESSED")
+        )
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        // Desregistramos el receiver al cerrar el servicio
+        LocalBroadcastManager.getInstance(this).unregisterReceiver(keyboardReceiver)
+    }
 
     override fun onCreateInputView(): View {
 
