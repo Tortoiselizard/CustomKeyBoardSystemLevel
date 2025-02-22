@@ -8,17 +8,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:background="#333"
         android:padding="8dp">
-
-        <TextView
-            android:id="@+id/banner_text"
-            android:layout_width="match_parent"
-            android:layout_height="60dp"
-            android:gravity="center"
-            android:text="El teclado está activado"
-            android:textColor="#FFF"
-            android:textSize="18sp"/>
 
         <!-- Primera fila -->
         <LinearLayout
