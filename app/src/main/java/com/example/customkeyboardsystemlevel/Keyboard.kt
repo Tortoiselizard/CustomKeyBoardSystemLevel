@@ -13,6 +13,7 @@ import android.widget.Button
 import android.widget.ImageView
 import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import android.widget.FrameLayout
+import android.widget.TextView
 
 class Keyboard : Service() {
 
@@ -28,9 +29,9 @@ class Keyboard : Service() {
             setBackgroundColor(0x80000000.toInt())
         }
 
-        // Configurar eventos de las teclas
-        val keys = listOf("1", "2", "3", "A", "B", "C")
-
+        // Lista de teclas
+//        val keys = listOf("1", "2", "3", "A", "B", "C")
+        val keys = listOf("1")
         keys.forEach { value ->
             val kewView = createKey(value)
             (keyboardView as FrameLayout).addView(kewView)
@@ -52,23 +53,15 @@ class Keyboard : Service() {
         windowManager.addView(keyboardView, layoutParams)
     }
 
-    // Función para crear una tecla (ImageView) programáticamente
-    private fun createKey(value: String): ImageView {
-        val screenWidth = Resources.getSystem().displayMetrics.widthPixels
-        val screenHeight = Resources.getSystem().displayMetrics.heightPixels
+    // Crear una tecla inflando desde XML
+    private fun createKey(value: String): View {
+        val inflater = LayoutInflater.from(this)
+        val keyView = inflater.inflate(R.layout.key_button, null)
 
-        val randomX = (0..screenWidth - 120).random()  // Evitar que se salga del borde
-        val randomY = (0..screenHeight - 120).random()
+        keyView.findViewById<TextView>(R.id.key_label).text = value
+        keyView.setOnClickListener { sendKey(value) }
 
-        return ImageView(this).apply {
-            layoutParams = FrameLayout.LayoutParams(120, 120).apply {
-                leftMargin = randomX  // Posición X aleatoria
-                topMargin = randomY   // Posición Y aleatoria
-            }
-            setImageResource(R.drawable.ic_floating_ball)
-            setOnClickListener { sendKey(value) }
-            alpha = 0.5f  // Opacidad
-        }
+        return keyView
     }
 
     private fun sendKey(value: String) {
